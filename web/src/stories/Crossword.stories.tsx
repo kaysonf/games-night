@@ -20,10 +20,18 @@ BaseCrossword.args = {
             startRow: 0,
             word: 'chicken',
             direction: Direction.Across
+        },
+        {
+            startCol: 0,
+            startRow: 0,
+            word: 'cuck',
+            direction: Direction.Down
+        },
+        {
+            startCol: 5,
+            startRow: 0,
+            word: 'england',
+            direction: Direction.Down
         }
-    ],
-    wordMap: [
-        'chicken'.split(''),
-        '  fish'.split(''),
     ]
 }

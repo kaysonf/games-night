@@ -12,5 +12,5 @@ const Template: ComponentStory<typeof Cell> = (args) => <Cell {...args} />;
 export const BaseCell = Template.bind({});
 
 BaseCell.args = {
-    character: 'h'
+    character: 'a'
 }
