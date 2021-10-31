@@ -1,6 +1,6 @@
-import React, {FC} from "react";
-import {WordProp, Direction} from "./Word";
-import {Cell} from "./Cell";
+import React, {FC, useReducer} from "react";
+import {Direction, WordProp} from "./Word";
+import {PureCell} from "./Cell";
 
 interface CrossWordProp {
     words: WordProp[];
@@ -9,7 +9,7 @@ interface CrossWordProp {
 
 const createIter = (n: number) => [...Array(n)]
 
-const findMaxDimensions = (words: WordProp[]): {maxRow: number, maxCol: number} => {
+const findMaxDimensions = (words: WordProp[]): { maxRow: number, maxCol: number } => {
     return words.reduce((prev, word) => {
         let maxRow: number, maxCol: number;
 
@@ -26,7 +26,7 @@ const findMaxDimensions = (words: WordProp[]): {maxRow: number, maxCol: number} 
     }, {maxRow: 0, maxCol: 0})
 }
 
-const createWordMap = (maxRow: number, maxCol: number) => createIter(maxRow).map(_ => [...createIter(maxCol)]);
+const createWordMap = (maxRow: number, maxCol: number): string[][] => createIter(maxRow).map(_ => [...createIter(maxCol)]);
 
 const createAnswers = (maxRow: number, maxCol: number, words: WordProp[]): string[][] => {
 
@@ -36,22 +36,28 @@ const createAnswers = (maxRow: number, maxCol: number, words: WordProp[]): strin
         const word = wordProp.word.split('');
 
         word.forEach((c, i) => {
-          if (wordProp.direction === Direction.Across)
-              wordMap[wordProp.startRow][wordProp.startCol + i] = c;
-          else
-              wordMap[wordProp.startRow + i][wordProp.startCol] = c;
+            if (wordProp.direction === Direction.Across)
+                wordMap[wordProp.startRow][wordProp.startCol + i] = c;
+            else
+                wordMap[wordProp.startRow + i][wordProp.startCol] = c;
         })
     });
 
     return wordMap;
 }
 
+const reducer = (prev: string[][], params: { r: number, c: number, s: string }) => {
+    const {r, c, s} = params;
+    prev[r][c] = s;
+    return [...prev];
+}
+
 export const Crossword: FC<CrossWordProp> = ({words, onCellChange = (f: Function) => f}) => {
 
     const {maxRow: totalRows, maxCol: totalCols} = findMaxDimensions(words);
 
-    const answerWordMap = createAnswers(totalRows, totalCols, words);
-    const guessWordMap = createWordMap(totalRows, totalRows);
+    const answerWordMap = createAnswers(totalRows, totalCols, words); // TODO: move to answer context?
+    const [guessWordMap, updateGuessWordMap] = useReducer(reducer, createWordMap(totalRows, totalRows)); // TODO: consume from answer context?
 
     return (
         <div>
@@ -65,17 +71,17 @@ export const Crossword: FC<CrossWordProp> = ({words, onCellChange = (f: Function
 
                                 <td key={c}>
                                     {answerWordMap[r][c] && answerWordMap[r][c].match(/[a-z]/i) ?
-                                        <Cell key={`${r}_${c}`}
-                                          row={r}
-                                          col={c}
-                                          character={answerWordMap[r][c]}
+                                        <PureCell key={`${r}_${c}`}
+                                                  row={r}
+                                                  col={c}
+                                                  onCellChange={updateGuessWordMap}
+                                                  character={guessWordMap[r][c]}
                                         />
                                         : null}
                                 </td>
 
                             ))}
                         </tr>
-
                     )}
                 </tbody>
             </table>

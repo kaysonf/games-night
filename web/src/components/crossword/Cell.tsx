@@ -1,4 +1,4 @@
-import React, {ComponentProps, FC, useReducer, useState} from "react";
+import React, {FC, memo} from "react";
 
 
 export interface Position {
@@ -6,27 +6,41 @@ export interface Position {
     col: number;
 }
 
-interface CellProps extends Position{
+interface CellProps extends Position {
     character: string;
+    onCellChange: Function;
+    disabled?: boolean;
 }
 
-const useCell = (defaultCell: string = '') => {
-    const [cellValue, updateCell] = useState(defaultCell);
-    return [cellValue, updateCell];
-}
+const BLANK = ' ';
+const NEXT = 1;
+const ASCII_a = 'a'.charCodeAt(0); // 97
+const NUMBER_OF_ALPHABETS = 26;
 
 const _nextChar = (c: string): string => {
-    if (c === 'z') return ' ';
-    if (c === ' ') return 'a';
-    return String.fromCharCode(((c.charCodeAt(0) + 1 - 97) % 26) + 97)
+    if (c === 'z') return BLANK;
+    if (!c || c === BLANK) return 'a';
+    return String.fromCharCode(
+        ((c.charCodeAt(0) + NEXT - ASCII_a) % NUMBER_OF_ALPHABETS) + ASCII_a);
 }
 
-export const Cell: FC<CellProps> = (props: CellProps) => {
-    const [char, nextChar] = useReducer((char: string) => _nextChar(char), props.character)
+const Cell: FC<CellProps> = (
+    {
+        row,
+        col,
+        character = BLANK,
+        disabled= false,
+        onCellChange = (f: Function) => f
+    }
+) => {
 
     return (
-        <button onClick={() => nextChar()}>
-            {char}
+        <button disabled={disabled} onClick={() => {
+            onCellChange({r: row, c: col, s: _nextChar(character)});
+        }}>
+            {character}
         </button>
     )
 }
+
+export const PureCell = memo(Cell);

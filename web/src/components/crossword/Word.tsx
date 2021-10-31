@@ -1,5 +1,5 @@
 import React, {FC} from 'react';
-import {Cell, Position} from "./Cell";
+import {PureCell, Position} from "./Cell";
 
 export enum Direction {
     Across = 'across',
@@ -26,7 +26,7 @@ export const Word: FC<WordProp> = (props) => {
         <div className={'container'}>
             {characters
                 .map((c, i) => (
-                    <Cell {...getPos(i)} character={c}/>)
+                    <PureCell {...getPos(i)} character={c}/>)
                 )
             }
         </div>

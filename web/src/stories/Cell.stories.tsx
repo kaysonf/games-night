@@ -1,16 +1,16 @@
 import React from 'react';
 import {ComponentMeta, ComponentStory} from '@storybook/react';
-import {Cell} from "../components/crossword/Cell";
+import {PureCell} from "../components/crossword/Cell";
 
 export default {
     title: 'Cell',
-    component: Cell
-} as ComponentMeta<typeof Cell>;
+    component: PureCell
+} as ComponentMeta<typeof PureCell>;
 
-const Template: ComponentStory<typeof Cell> = (args) => <Cell {...args} />;
+const Template: ComponentStory<typeof PureCell> = (args) => <PureCell {...args} />;
 
 export const BaseCell = Template.bind({});
 
 BaseCell.args = {
-    character: 'a'
+    character: 'a',
 }
