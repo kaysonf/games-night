@@ -1,46 +1,51 @@
 import React, {FC, memo} from "react";
 
-
 export interface Position {
     row: number;
     col: number;
 }
 
-interface CellProps extends Position {
+export interface CellProps extends Position {
     character: string;
-    onCellChange: Function;
+    wordId: number[];
+    answer: string;
+    onCellChange?: Function;
     disabled?: boolean;
 }
-
 const BLANK = ' ';
 const NEXT = 1;
 const ASCII_a = 'a'.charCodeAt(0); // 97
 const NUMBER_OF_ALPHABETS = 26;
 
-const _nextChar = (c: string): string => {
-    if (c === 'z') return BLANK;
-    if (!c || c === BLANK) return 'a';
+const _nextChar = (character: string): string => {
+
+    if (character === 'z') return BLANK;
+    if (!character || character === BLANK) return 'a';
+
     return String.fromCharCode(
-        ((c.charCodeAt(0) + NEXT - ASCII_a) % NUMBER_OF_ALPHABETS) + ASCII_a);
+        ((character.charCodeAt(0) + NEXT - ASCII_a) % NUMBER_OF_ALPHABETS) + ASCII_a);
 }
 
-const Cell: FC<CellProps> = (
-    {
-        row,
-        col,
-        character = BLANK,
-        disabled= false,
-        onCellChange = (f: Function) => f
+const Cell: FC<CellProps> = (props) => {
+
+    const emitCellChange = (msg: CellProps): void => {
+        props.onCellChange!(msg);
     }
-) => {
 
     return (
-        <button disabled={disabled} onClick={() => {
-            onCellChange({r: row, c: col, s: _nextChar(character)});
+        <button disabled={props.disabled} onClick={() => {
+            emitCellChange({
+                ...props,
+                character: _nextChar(props.character),
+            });
         }}>
-            {character}
+            {props.character}
         </button>
     )
 }
-
+Cell.defaultProps = {
+    character: BLANK,
+    disabled: false,
+    onCellChange: (f: Function) => f
+}
 export const PureCell = memo(Cell);

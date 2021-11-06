@@ -13,4 +13,5 @@ export const BaseCell = Template.bind({});
 
 BaseCell.args = {
     character: 'a',
+    wordId: [1]
 }
