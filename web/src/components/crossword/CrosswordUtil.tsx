@@ -1,5 +1,5 @@
 import {CellProps} from "./Cell";
-import {Direction, WordProp} from "./Word";
+import {Direction, WordProp} from "./WordHints";
 import {CrosswordGameState} from "./Crossword";
 
 
@@ -39,6 +39,8 @@ export const updateGameStateReducer = (prev: CrosswordGameState, cell: CellProps
             })
 
             prev.wordsLeftToGuess -= 1;
+            const idx = prev.words.findIndex(word => word === affectedWord)
+            prev.words[idx] = {...affectedWord, found: true};
         }
 
     })

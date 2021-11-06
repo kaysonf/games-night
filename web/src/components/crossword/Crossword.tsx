@@ -1,5 +1,5 @@
 import React, {FC, useReducer} from "react";
-import {WordProp} from "./Word";
+import {WordHints, WordProp} from "./WordHints";
 import {CellProps} from "./Cell";
 import {createGameState, findMaxDimensionsOfCrossword, updateGameStateReducer,} from "./CrosswordUtil";
 import {Grid} from "./Grid";
@@ -31,9 +31,17 @@ export const Crossword: FC<CrossWordProp> = (props) => {
     }
 
     return (
-        <div>
-            <Grid gameState={gameState}
-                  onCellChange={updateGameState}/>
+        <div style={{display: 'flex'}}>
+
+            <div style={{flex: 0.25}}>
+                <Grid  gameState={gameState}
+                       onCellChange={updateGameState}/>
+            </div>
+
+            <div style={{flex: 0.25}}>
+                <WordHints words={gameState.words}/>
+            </div>
+
         </div>
     )
 }

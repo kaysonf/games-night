@@ -1,7 +1,7 @@
 import React from 'react';
 import {ComponentMeta, ComponentStory} from '@storybook/react';
 import {Crossword} from "../components/crossword/Crossword";
-import {Direction} from "../components/crossword/Word";
+import {Direction} from "../components/crossword/WordHints";
 
 
 export default {
@@ -20,21 +20,24 @@ BaseCrossword.args = {
             startCol: 0,
             startRow: 0,
             word: 'chicken',
-            direction: Direction.Across
+            direction: Direction.Across,
+            found: false
         },
         {
             id: 2,
             startCol: 0,
             startRow: 0,
-            word: 'cuck',
-            direction: Direction.Down
+            word: 'caaa',
+            direction: Direction.Down,
+            found: false,
         },
         {
             id: 3,
             startCol: 5,
             startRow: 0,
             word: 'england',
-            direction: Direction.Down
+            direction: Direction.Down,
+            found: false
         }
     ]
 }
