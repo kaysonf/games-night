@@ -7,8 +7,8 @@ export interface Position {
 
 export interface CellProps extends Position {
     character: string;
-    wordId: number[];
-    answer: string;
+    wordId: number[]; // TODO: move out of cell props
+    answer: string; // TODO: move out of cell props
     onCellChange?: Function;
     disabled?: boolean;
 }
